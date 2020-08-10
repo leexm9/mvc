@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- 负责一些非MVC组件的配置 -->
+
+    <bean id="simpleUrlHandlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="urlMap">
+            <map>
+                <entry key="/per" value-ref="personController"/>
+                <entry key="/hello" value-ref="helloController"/>
+            </map>
+        </property>
+        <!-- 要保证 SimpleUrlHandlerMapping 在 default-servlet-handler 之前，否者 /per /hello 无法解析到-->
+        <!-- order=0 与 default-servlet-handler 放最后 二选一 -->
+<!--        <property name="order" value="0"/>-->
+    </bean>
+    <mvc:default-servlet-handler/>  <!--这句要加上，要不然可能会访问不到静态资源，具体作用自行百度-->
+
+    <bean id="personController" class="com.leexm.demo.mvc.controller.PersonController">
+        <property name="supportedMethods" value="GET"/>
+    </bean>
+    <bean id="helloController" class="com.leexm.demo.mvc.controller.HelloController">
+        <property name="supportedMethods" value="GET"/>
+    </bean>
+
+</beans>
